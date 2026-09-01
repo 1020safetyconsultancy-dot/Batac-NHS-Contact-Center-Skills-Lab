@@ -1,7 +1,15 @@
-const titles={dashboard:'Skills Dashboard',learn:'Learning Modules',scripts:'Sample Script Library',practice:'AI Practice Simulator',markets:'Industry Explorer',progress:'Progress & Mastery'};
+const titles={admin:'Admin Overview',dashboard:'Skills Dashboard',learn:'Learning Modules',scripts:'Sample Script Library',practice:'AI Practice Simulator',markets:'Industry Explorer',progress:'Progress & Mastery'};
 function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));document.querySelector('#title').textContent=titles[id]}
 window.show=show;
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+const accounts={student:{username:'student01',password:'BatacStudent2026!',name:'Student Trainee',subtitle:'Grade 12 • ICT',initials:'ST'},admin:{username:'admin',password:'BatacAdmin2026!',name:'School Administrator',subtitle:'Administrator',initials:'AD'}};
+let loginRole='student';
+document.querySelectorAll('.roleTabs button').forEach(b=>b.onclick=()=>{loginRole=b.dataset.role;document.querySelectorAll('.roleTabs button').forEach(x=>x.classList.toggle('active',x===b));document.querySelector('#loginError').textContent=''});
+document.querySelector('#showPassword').onclick=()=>{const p=document.querySelector('#loginPassword');p.type=p.type==='password'?'text':'password';document.querySelector('#showPassword').textContent=p.type==='password'?'Show':'Hide'};
+document.querySelector('#loginForm').onsubmit=e=>{e.preventDefault();const a=accounts[loginRole],user=document.querySelector('#loginUsername').value.trim(),pass=document.querySelector('#loginPassword').value;if(user===a.username&&pass===a.password){localStorage.setItem('bnhs-session',loginRole);enterPortal(loginRole)}else document.querySelector('#loginError').textContent='Incorrect username, password, or account type.'};
+function enterPortal(role){const a=accounts[role];document.body.classList.remove('locked');document.body.classList.toggle('adminUser',role==='admin');document.querySelector('#loginScreen').classList.add('hidden');document.querySelector('#profileInitials').textContent=a.initials;document.querySelector('#profileName').textContent=a.name;document.querySelector('#profileRole').textContent=a.subtitle;show(role==='admin'?'admin':'dashboard')}
+document.querySelector('#logoutBtn').onclick=()=>{localStorage.removeItem('bnhs-session');location.href='index.html'};
+const savedSession=localStorage.getItem('bnhs-session');if(savedSession&&accounts[savedSession])enterPortal(savedSession);
 const modules=[
 ['Introduction to Non-Voice Contact Center Services','Voice vs. non-voice; live chat, email, messaging, ticketing, social media support, back-office services, and common non-voice products and services.','Classify examples according to channel and service type.'],
 ['Written Communication Skills for Customer Service','Grammar, spelling, punctuation, sentence construction, clarity, conciseness, professional vocabulary, and avoiding inappropriate slang or text language.','Edit poorly written customer-service messages.'],
